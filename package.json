@@ -1,0 +1,33 @@
+{
+  "name": "create-arsh-electron",
+  "version": "0.1.0",
+  "description": "Scaffold an Arshdelight-style Electron + React + TypeScript desktop app — frameless window, UI primitives, and packaging fixes built in.",
+  "type": "module",
+  "bin": {
+    "create-arsh-electron": "index.js"
+  },
+  "files": [
+    "index.js",
+    "template"
+  ],
+  "engines": {
+    "node": ">=20.11"
+  },
+  "keywords": [
+    "electron",
+    "react",
+    "typescript",
+    "scaffold",
+    "create",
+    "starter",
+    "template"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "Liz@Arshdelight",
+    "email": "cjhzisme@163.com"
+  },
+  "dependencies": {
+    "@clack/prompts": "^1.8.1"
+  }
+}
