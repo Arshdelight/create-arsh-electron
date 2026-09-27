@@ -30,7 +30,7 @@ npm run build    # 清理产物 → 类型检查 → vite build → electron-bui
 │   ├── App.tsx              # 极简单页示例（原语用法查 src/ui 各文件顶部注释）
 │   └── index.css
 ├── .temp/                   # 本地草稿（gitignore）
-├── AGENTS.md                # AI 编程约定（agent 型 CLI 每次会话都会读）
+├── AGENTS.md                # AI 协作约定（引导式文件：首次 AI 会话采访你并生成正式约定）
 └── electron-builder.json5
 ```
 

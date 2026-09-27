@@ -11,7 +11,8 @@ The generated project ships with:
 - Electron 42 + Vite 8 + React 19 + TypeScript 6 + Tailwind CSS 4
 - Frameless window with a custom title bar (minimize / maximize / close / pin)
 - UI primitives — `AppLayout`, `TitleBar`, `NavItem`, `Button`, `Dialog`, `Tooltip`, `Spinner`, `Switch` — with theme tokens in plain CSS variables
-- `AGENTS.md` for AI coding tools, and a minimal single-page starter
+- `AGENTS.md` bootstrap — the first AI session interviews the user and writes
+  the project conventions, plus a minimal single-page starter
 - Engineering fixes baked in: clean build outputs, `dependencies`/`devDependencies` partition (asar stays tiny), Electron binary mirror for reliable installs, complete `.gitignore`
 
 ## Usage
@@ -35,7 +36,7 @@ npm create arsh-electron@latest my-app
 cd my-app && npm install && npm run dev
 ```
 
-生成 Arshdelight 风格的 Electron + React + TS 项目：无边框窗口、UI 原语、AI 协作约定（AGENTS.md）、打包修复全部内置。装完依赖直接写业务。
+生成 Arshdelight 风格的 Electron + React + TS 项目：无边框窗口、UI 原语、打包修复全部内置；AGENTS.md 是引导式文件，首次 AI 会话会采访你并生成项目专属约定。装完依赖直接写业务。
 
 ## License
 
