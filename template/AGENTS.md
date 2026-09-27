@@ -33,39 +33,16 @@ Then rewrite this file:
 
 ## Engineering rules
 
-These encode how this template builds and packages correctly. Keep them intact.
+Three rules that normal, well-scoped tasks would otherwise silently violate.
+Keep them intact.
 
-- Layout: `electron/` holds the main process and preload (all Node/Electron
-  code); `src/` is the renderer (React 19 + Tailwind CSS 4); `src/ui/` holds the
-  UI primitives and theme tokens (`styles.css` `:root` variables — reskin there,
-  including dark themes); `src/lib/` has `cn()` and the IPC bridge detection.
-- Renderer code never imports Node/Electron APIs. All IPC goes through
+- **Dependency partition**: `dependencies` holds only main-process runtime
+  packages, in sync with the `external` list in `vite.config.ts`. Renderer-only
+  libraries go to `devDependencies` — `npm install <lib>` defaults to
+  `dependencies`, which bloats app.asar with a full node_modules tree.
+- **Renderer never touches Node/Electron APIs**: all IPC goes through
   `window.ipcRenderer` (see `src/lib/electron.ts`). New channels: handler in
   `electron/main.ts`, exposure in `electron/preload.ts`, typing in
-  `src/global.d.ts`. Primitives must keep working without the bridge —
-  `getIpc()` returns null on plain web.
-- Dependency partition (packaging size, hard rule): `dependencies` holds ONLY
-  main-process runtime packages, and must stay in sync with the `external` list
-  in `vite.config.ts`. Everything used only by the renderer goes to
-  `devDependencies`. Test: remove the package — if the packaged app still runs,
-  it belongs in devDependencies. A misplaced package bloats app.asar with a full
-  node_modules tree.
-- Frameless window: window controls use the `window:*` IPC channels; drag
-  regions use `titlebar-drag-region` / `titlebar-no-drag`. Layer order:
-  title bar (z-50) < Dialog (z-60) < Tooltip (z-100).
-- The build script cleans `dist/` and `dist-electron/` first — do not remove
-  that. Vite only clears `dist/`; stale files in `dist-electron/` get packaged
-  into app.asar.
-- Packaging: `electron-builder.json5` pins the npmmirror mirror for the Electron
-  binary. electron-builder 26 re-downloads it on every build (no local cache —
-  expected, ~40s); without the mirror it falls back to GitHub, which often
-  fails. `electron-builder` packs everything under `dependencies` — that is why
-  the partition rule exists.
-- Read env vars that Vite may replace with bracket access:
-  `process.env['VITE_DEV_SERVER_URL']`.
-- Preload output is `dist-electron/preload.mjs`; main.ts references it by name.
-- Never hand-edit or commit `dist/`, `dist-electron/`, `release/`. Scratch work
-  goes to `.temp/` (gitignored).
-- TypeScript is strict (`noUnusedLocals`, `noUnusedParameters` included).
-  Baseline verification: `npm run lint` (zero warnings) and `npx tsc --noEmit`.
-  `npm run build` runs full packaging (slow; for release checks).
+  `src/global.d.ts`.
+- **Definition of done**: `npm run lint` (zero warnings) and `npx tsc --noEmit`
+  both pass before work counts as complete.
