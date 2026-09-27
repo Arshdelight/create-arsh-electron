@@ -13,7 +13,9 @@ The generated project ships with:
 - UI primitives — `AppLayout`, `TitleBar`, `NavItem`, `Button`, `Dialog`, `Tooltip`, `Spinner`, `Switch` — with theme tokens in plain CSS variables
 - `AGENTS.md` bootstrap — the first AI session interviews the user and writes
   the project conventions, plus a minimal single-page starter
-- Engineering fixes baked in: clean build outputs, `dependencies`/`devDependencies` partition (asar stays tiny), Electron binary mirror for reliable installs, complete `.gitignore`
+- Build pipeline with clean outputs, a `dependencies`/`devDependencies` split
+  that keeps `app.asar` small, an Electron binary mirror for reliable installs,
+  and a complete `.gitignore`
 
 ## Usage
 
@@ -28,15 +30,6 @@ npm create arsh-electron@latest [project-name]
 The CLI asks for a project name, derives `package.json` name / `productName` / `appId` / window title / title-bar brand from it, and offers to initialize git with a first commit.
 
 Requires Node.js ≥ 20.11.
-
-## 中文速览
-
-```bash
-npm create arsh-electron@latest my-app
-cd my-app && npm install && npm run dev
-```
-
-生成 Arshdelight 风格的 Electron + React + TS 项目：无边框窗口、UI 原语、打包修复全部内置；AGENTS.md 是引导式文件，首次 AI 会话会采访你并生成项目专属约定。装完依赖直接写业务。
 
 ## License
 
