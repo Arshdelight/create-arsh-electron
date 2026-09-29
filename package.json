@@ -1,11 +1,19 @@
 {
   "name": "create-arsh-electron",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Scaffold an Arshdelight-style Electron + React + TypeScript desktop app — frameless window, UI primitives, and packaging fixes built in.",
   "type": "module",
   "bin": {
     "create-arsh-electron": "index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Arshdelight/create-arsh-electron.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Arshdelight/create-arsh-electron/issues"
+  },
+  "homepage": "https://github.com/Arshdelight/create-arsh-electron#readme",
   "files": [
     "index.js",
     "template"
