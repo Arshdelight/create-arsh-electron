@@ -132,6 +132,11 @@ async function main() {
   const spinner = p.spinner()
   spinner.start('Scaffolding project…')
   fs.cpSync(templateDir, projectDir, { recursive: true })
+  // npm publish strips .gitignore / .npmrc from the tarball, so the template
+  // ships them dotless and they get their dot back here
+  for (const f of ['gitignore', 'npmrc', 'temp']) {
+    fs.renameSync(path.join(projectDir, f), path.join(projectDir, `.${f}`))
+  }
   applyRenames(projectDir, { packageName, productName, appId })
 
   let gitNote = ''
