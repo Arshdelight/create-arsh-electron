@@ -44,5 +44,5 @@ Keep them intact.
   `window.ipcRenderer` (see `src/lib/electron.ts`). New channels: handler in
   `electron/main.ts`, exposure in `electron/preload.ts`, typing in
   `src/global.d.ts`.
-- **Definition of done**: `npm run lint` (zero warnings) and `npx tsc --noEmit`
-  both pass before work counts as complete.
+- **Definition of done**: `npm run lint` (zero warnings), `npx tsc --noEmit`, and
+  `npm test` all pass before work counts as complete.

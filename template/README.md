@@ -13,6 +13,7 @@ npm install
 npm run dev      # start the dev app with hot reload
 npm run build    # type-check, bundle, and package installers into release/
 npm run lint     # ESLint, zero warnings
+npm test         # vitest
 ```
 
 ## Structure

@@ -26,12 +26,14 @@ npm create arsh-electron@latest my-app
 
 - **Frameless window, custom title bar** — minimize / maximize / close, double-click to toggle maximize, an optional always-on-top pin, drag regions already wired up
 - **Minimal single-page starter** — enough to see hot reload work, nothing to delete first
+- **Test & CI baseline** — vitest wired up (`npm test`), a GitHub Actions workflow running lint + typecheck + tests on push/PR
 - **Packaging fixed before you hit it** — build outputs cleaned every run (no ghost files), a `dependencies`/`devDependencies` split that keeps `app.asar` at ~0.26 MB, Electron binary mirrors for reliable installs, a complete `.gitignore`, and git initialized with a first commit so AI edits are diffable from day one
 
 ## Usage
 
 ```bash
 npm create arsh-electron@latest [project-name]
+npm create arsh-electron@latest [project-name] -- --scope <name>
 
 # non-interactive
 npm create arsh-electron@latest my-app -- --yes
@@ -39,9 +41,10 @@ npm create arsh-electron@latest my-app -- --yes
 
 | Flag | Description |
 |---|---|
+| `--scope <name>` | appId namespace, `com.<scope>.<app>` (default: `arshdelight`) |
 | `--yes` | Skip prompts, use defaults (git init included) |
 
-The CLI asks two questions — project name, git init or not — and derives everything else: `package.json` name, installer `productName`, `appId`, window title and title-bar brand. Answer `arsh-demo` and you get `ArshDemo` / `com.arshdelight.arshdemo`.
+The CLI asks two questions — project name, git init or not — and derives everything else: `package.json` name (and `author`, from your git config), installer `productName`, `appId`, window title and title-bar brand. Answer `arsh-demo` and you get `ArshDemo` / `com.arshdelight.arshdemo`; add `--scope mycompany` and it becomes `com.mycompany.arshdemo`.
 
 Requires Node.js ≥ 20.11.
 

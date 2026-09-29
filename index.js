@@ -8,9 +8,10 @@ import * as p from '@clack/prompts'
 const templateDir = path.join(import.meta.dirname, 'template')
 
 const usage = [
-  'Usage: npm create arsh-electron@latest [project-name] [--yes]',
+  'Usage: npm create arsh-electron@latest [project-name] [--scope <name>] [--yes]',
   '',
-  '  --yes   Skip prompts and use defaults (git init included)',
+  '  --scope <name>  appId namespace (default: arshdelight)',
+  '  --yes           Skip prompts and use defaults (git init included)',
 ].join('\n')
 
 function slugify(name) {
@@ -44,6 +45,17 @@ function gitAvailable() {
   }
 }
 
+function gitAuthor() {
+  try {
+    const name = execFileSync('git', ['config', 'user.name'], { stdio: 'pipe' }).toString().trim()
+    if (!name) return null
+    const email = execFileSync('git', ['config', 'user.email'], { stdio: 'pipe' }).toString().trim()
+    return email ? { name, email } : { name }
+  } catch {
+    return null
+  }
+}
+
 function initGit(projectDir) {
   const run = (args) => execFileSync('git', args, { cwd: projectDir, stdio: 'ignore' })
   run(['init'])
@@ -55,7 +67,7 @@ function initGit(projectDir) {
   }
 }
 
-function applyRenames(projectDir, { packageName, productName, appId }) {
+function applyRenames(projectDir, { packageName, productName, appId, author }) {
   const replace = (file, pairs) => {
     const file_ = path.join(projectDir, file)
     let content = fs.readFileSync(file_, 'utf8')
@@ -63,6 +75,9 @@ function applyRenames(projectDir, { packageName, productName, appId }) {
     fs.writeFileSync(file_, content)
   }
   replace('package.json', [['"name": "arsh-electron-app"', `"name": "${packageName}"`]])
+  if (author) {
+    replace('package.json', [['"author": "Your Name"', `"author": ${JSON.stringify(author)}`]])
+  }
   replace('electron-builder.json5', [['com.arshdelight.arshapp', appId], ['"productName": "ArshApp"', `"productName": "${productName}"`]])
   replace('index.html', [['Arsh Electron', productName]])
   replace('src/App.tsx', [['brand="Arsh Electron"', `brand="${productName}"`]])
@@ -77,10 +92,23 @@ async function main() {
   }
 
   const yes = args.includes('--yes')
-  const positional = args.find((a) => !a.startsWith('-'))
+  const scopeIdx = args.indexOf('--scope')
+  const scopeArg = scopeIdx !== -1 ? args[scopeIdx + 1] : args.find((a) => a.startsWith('--scope='))
+  const positional = args.find((a) => !a.startsWith('-') && a !== scopeArg)
   const nonInteractive = !process.stdout.isTTY || yes
 
   p.intro('create-arsh-electron')
+
+  let scopeSlug = 'arshdelight'
+  if (scopeArg !== undefined) {
+    const raw = scopeArg.startsWith('--scope=') ? scopeArg.slice('--scope='.length) : scopeArg
+    scopeSlug = slugify(raw)
+    if (!scopeSlug) {
+      p.log.error('Scope must contain letters or digits')
+      process.exitCode = 1
+      return
+    }
+  }
 
   let projectName = positional
   if (!projectName) {
@@ -110,7 +138,8 @@ async function main() {
   const projectDir = path.resolve(process.cwd(), slug)
   const packageName = slug
   const productName = toProductName(slug)
-  const appId = `com.arshdelight.${slug.replace(/-/g, '')}`
+  const appId = `com.${scopeSlug}.${slug.replace(/-/g, '')}`
+  const author = gitAuthor()
 
   if (!isEmptyDir(projectDir)) {
     let overwrite = yes
@@ -137,7 +166,7 @@ async function main() {
   for (const f of ['gitignore', 'npmrc', 'temp']) {
     fs.renameSync(path.join(projectDir, f), path.join(projectDir, `.${f}`))
   }
-  applyRenames(projectDir, { packageName, productName, appId })
+  applyRenames(projectDir, { packageName, productName, appId, author })
 
   let gitNote = ''
   if (gitAvailable()) {

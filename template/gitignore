@@ -31,3 +31,6 @@ release
 
 # AGENTS.md 默认随模板入库；若想保持本地不提交，取消下一行注释
 # AGENTS.md
+
+# test coverage
+coverage/

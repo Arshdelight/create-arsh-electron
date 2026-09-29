@@ -1,6 +1,6 @@
 {
   "name": "create-arsh-electron",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Scaffold an Arshdelight-style Electron + React + TypeScript desktop app — frameless window, UI primitives, and packaging fixes built in.",
   "type": "module",
   "bin": {
